@@ -99,4 +99,25 @@ class AwsCostLineChart extends LineChartWidget
     {
         return 'my-chart-id'; // must match the one in JS and blade
     }
+
+    protected function getOptions(): array
+    {
+        return [
+            'animation' => [
+            'duration' => 1500, // 1.5 seconds
+            'easing' => 'easeInOutQuart',
+            ],
+            'plugins' => [
+                'legend' => [
+                'display' => true,
+                'position' => 'top',
+                ],
+            ],
+                'scales' => [
+                'y' => [
+                'beginAtZero' => true,
+                ],
+         ],
+        ];
+    }
 }

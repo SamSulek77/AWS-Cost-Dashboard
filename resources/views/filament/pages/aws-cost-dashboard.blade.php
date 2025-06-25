@@ -106,17 +106,27 @@
         }
     </style>
 
+
+
+
     </div>
 </div>
 
+
+
 <div class="mt-6">
-    @livewire('ai-summary-widget')
+@livewire(\App\Filament\Widgets\AwsCostTableWidget::class)
 </div>
 
 
-@livewire('chatbot')
+<div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+        @livewire('ai-summary-widget')
+    </div>
 
-
-
+    <div>
+        @livewire('chatbot')
+    </div>
+</div>
 
 </x-filament-panels::page>

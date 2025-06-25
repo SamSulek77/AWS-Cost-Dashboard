@@ -6,6 +6,7 @@ use Livewire\Component;
 use OpenAI\Laravel\Facades\OpenAI;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Filament\Notifications\Notification;
 
 class AiSummaryWidget extends Component
 {
@@ -29,7 +30,7 @@ class AiSummaryWidget extends Component
         }
 
         $response = OpenAI::chat()->create([
-            'model' => 'gpt-4.1-nano',
+            'model' => 'gpt-4.1-nano', // or 'gpt-4', 'gpt-3.5-turbo'
             'messages' => [
                 ['role' => 'system', 'content' => 'Summarize AWS account spending in plain language.'],
                 ['role' => 'user', 'content' => $text],
@@ -37,12 +38,26 @@ class AiSummaryWidget extends Component
         ]);
 
         $this->summary = $response->choices[0]->message->content ?? 'No summary generated.';
+
+        Notification::make()
+            ->title('Summary Generated')
+            ->body('The AI has generated your AWS cost summary.')
+            ->success()
+            ->duration(3000)
+            ->send();
     }
 
     public function exportSummary()
     {
         $fileName = 'ai-summary-' . now()->format('Ymd_His') . '.txt';
         $content = $this->summary ?: 'No summary available.';
+
+        Notification::make()
+            ->title('Exported Successfully')
+            ->body('AI summary exported as .txt file')
+            ->success()
+            ->duration(3000)
+            ->send();
 
         return response()->streamDownload(function () use ($content) {
             echo $content;
@@ -51,11 +66,8 @@ class AiSummaryWidget extends Component
         ]);
     }
 
-
-
     public function render()
     {
         return view('livewire.ai-summary-widget');
     }
 }
-
